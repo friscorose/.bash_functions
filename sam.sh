@@ -2,7 +2,17 @@
 #xfce agent? NO! xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
 sam () 
 { 
+    [ "$DEBUG" ] && echo "Paging Sam!";
+
+    SAM_ENV_FILE=$HOME/.ssh/.sam_env_file; 
+    SAM_AUTH_SOCK=$HOME/.ssh/.sam_auth_sock;
+
     bye_sam () {
+        if [ "$SSH_AUTH_SOCK" = "$SAM_AUTH_SOCK" ]; then
+            echo "SAM identities validated from localhost:";
+        else
+            echo "SAM identities validated from ${SSH_CONNECTION%%' '*}:";
+        fi
         ssh-add -l;
         unset DEBUG; 
         unset SA_Stat; 
@@ -14,11 +24,6 @@ sam ()
     }
 
     #DEBUG="INFO";
-    [ "$DEBUG" ] && echo "Paging Sam!";
-
-    SAM_ENV_FILE=$HOME/.ssh/.sam_env_file; 
-    SAM_AUTH_SOCK=$HOME/.ssh/.sam_auth_sock;
-    
     if [ -f /usr/bin/ssh-askpass -a -n "$DISPLAY" ]; then
         export SSH_ASKPASS=${SSH_ASKPASS-/usr/bin/ssh-askpass};
         SAM_CONFIRM=${SSH_ASKPASS:+'-c'};
