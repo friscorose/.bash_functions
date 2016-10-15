@@ -2,6 +2,7 @@
 #xfce agent? NO! xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
 sam () 
 { 
+    #DEBUG="INFO";
     [ "$DEBUG" ] && echo "Paging Sam!";
 
     SAM_ENV_FILE=$HOME/.ssh/.sam_env_file; 
@@ -23,7 +24,6 @@ sam ()
         unset SAM_DISPLAY;
     }
 
-    #DEBUG="INFO";
     if [ -f /usr/bin/ssh-askpass -a -n "$DISPLAY" ]; then
         export SSH_ASKPASS=${SSH_ASKPASS-/usr/bin/ssh-askpass};
         SAM_CONFIRM=${SSH_ASKPASS:+'-c'};
